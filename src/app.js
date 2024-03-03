@@ -1,13 +1,26 @@
-// app.js
 const session = require('./neo4jConfig');
 
-async function runNeo4jQuery() {
-  const query = 'CREATE (user:Person {name: $name}) RETURN user';
-  const result = await session.run(query, { name: 'John' });
-
-  // Log the result to the console for inspection
-  console.log(result);
+// Function to run a Neo4j query
+async function runNeo4jQuery(query, parameters) {
+  try {
+    const result = await session.run(query, parameters);
+    return result.records;
+  } catch (error) {
+    console.error('Error running Neo4j query:', error);
+    throw error;
+  }
 }
 
-// Call the asynchronous function
-runNeo4jQuery();
+// Example: Run a query with parameters
+const query = 'MATCH (p:Person) RETURN p';
+const parameters = {};
+
+// Call the function and log the result
+runNeo4jQuery(query, parameters)
+  .then((records) => {
+    console.log(records);
+  })
+  .finally(() => {
+    // Close the Neo4j session when done
+    session.close();
+  });
