@@ -1,0 +1,127 @@
+
+
+ // script.js
+document.addEventListener('DOMContentLoaded', () => {
+    // Your data
+    const neo4jDataScript = document.getElementById('neo4jDataScript');
+    const neo4jData = JSON.parse(neo4jDataScript.getAttribute('data-neo4jdata'));
+
+    // Log the received data
+    console.log('Received data:', neo4jData);
+
+    // Extract unique nodes from neo4jData
+    const nodesSet = new Set();
+    neo4jData.forEach(item => {
+        nodesSet.add(item.node1.name);
+        nodesSet.add(item.node2.name);
+    });
+
+    const nodes = Array.from(nodesSet).map(name => ({ name }));
+
+    // Create links using node indices
+    const links = neo4jData.map(item => ({
+        source: nodes.findIndex(node => node.name === item.node1.name),
+        target: nodes.findIndex(node => node.name === item.node2.name),
+        relationship: item.relationship,
+    }));
+
+    // Log the relationships to diagnose the issue
+    console.log('Relationship values:', links.map(d => d.relationship));
+
+    // D3.js code to create a basic force-directed graph
+    const svgWidth = 800;
+    const svgHeight = 600;
+
+    const svg = d3.select("#chart")
+        .attr("width", svgWidth)
+        .attr("height", svgHeight);
+
+    // Create a simulation for the force-directed graph
+    const simulation = d3.forceSimulation(nodes)
+        .force("link", d3.forceLink(links).id(d => d.index))
+        .force("charge", d3.forceManyBody().strength(-50))
+        .force("center", d3.forceCenter(svgWidth / 2, svgHeight / 2));
+
+    // Add relationships as links
+    const link = svg.selectAll(".link")
+        .data(links)
+        .enter()
+        .append("line")
+        .attr("class", "link")
+        .attr("stroke", "gray")
+        .attr("stroke-width", 2)
+        .attr("marker-end", "url(#arrowhead)"); // Add arrowhead
+
+    // Add nodes as circles
+    const node = svg.selectAll(".node")
+        .data(nodes)
+        .enter()
+        .append("circle")
+        .attr("class", "node")
+        .attr("r", 20)
+        .attr("fill", "steelblue");
+
+    // Add labels for nodes
+    const nodeLabels = svg.selectAll(".node-label")
+        .data(nodes)
+        .enter()
+        .append("text")
+        .attr("class", "node-label")
+        .text(d => d.name)
+        .attr("text-anchor", "middle")
+        .attr("font-size", "10px");
+
+    // Add labels for relationships
+    const relationshipLabels = svg.selectAll(".relationship-label")
+        .data(links)
+        .enter()
+        .append("text")
+        .attr("class", "relationship-label")
+        .text(d => d.relationship)
+        .attr("text-anchor", "middle")
+        .attr("font-size", "10px");
+
+    // Add arrowhead definition
+    svg.append("defs").append("marker")
+        .attr("id", "arrowhead")
+        .attr("refX", 6 + 15) // Adjust the size of the arrowhead
+        .attr("refY", 2)
+        .attr("markerWidth", 6)
+        .attr("markerHeight", 4)
+        .attr("orient", "auto")
+        .append("path")
+        .attr("d", "M0,0 L6,2 L0,4")
+        .attr("fill", "gray");
+
+    // Add zoom behavior
+    const zoom = d3.zoom()
+        .scaleExtent([0.5, 5]) // Set the zoom scale limits
+        .on("zoom", () => {
+            svg.attr("transform", d3.event.transform);
+        });
+
+    svg.call(zoom);
+
+    // Update simulation on tick (animation frame)
+    simulation.on("tick", () => {
+        link
+            .attr("x1", d => d.source.x)
+            .attr("y1", d => d.source.y)
+            .attr("x2", d => d.target.x)
+            .attr("y2", d => d.target.y);
+
+        node
+            .attr("cx", d => d.x)
+            .attr("cy", d => d.y);
+
+        nodeLabels
+            .attr("x", d => d.x)
+            .attr("y", d => d.y - 30);
+
+        relationshipLabels
+            .attr("x", d => (d.source.x + d.target.x) / 2)
+            .attr("y", d => (d.source.y + d.target.y) / 2);
+    });
+});
+
+
