@@ -1,0 +1,48 @@
+
+
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>graphKeyLines</title>
+ 
+     <!-- Include D3.js library -->
+     <script src="https://d3js.org/d3.v5.min.js"></script>
+ 
+     <!-- Include NeoVis.js library (assuming this is your Neo4j visualization library) -->
+     <script src="https://cdn.neo4jlabs.com/neovis.js"></script>
+ 
+     <!-- Link to your custom JavaScript file -->
+     <script src="/js/script.js"></script>
+ 
+     <!-- Link to your custom CSS file -->
+     <link rel="stylesheet" href="/css/style.css">
+ </head>
+ <body>
+     <!-- Your HTML content here -->
+ 
+     <div id="visualization-container">
+        <!-- This is where D3.js or NeoVis.js will render the visualization -->
+
+        <ul>
+            <% neo4jData.forEach(item => { %>
+                <li class="list-item">
+                    
+                    <%= item.node1.name %> 
+                     <%= item.relationship %> 
+                     <%= item.node2.name %> 
+                     
+                    <!--  <br> <br> <br>
+                    <strong>Start Node:</strong> <%= item.node1.name %> <br>
+                    <strong>Relationship Type:</strong> <%= item.relationship %> <br>
+                    <strong>End Node:</strong> <%= item.node2.name %> <br> -->
+                </li>
+            <% }); %>
+        </ul>
+    </div>
+ 
+ </body>
+ </html>
+ 
