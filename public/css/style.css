@@ -22,6 +22,14 @@ body {
 ul {
     list-style-type: none;
 }
+.container {
+  max-width: 800px; /* Adjust the max-width as needed */
+  margin: 0 auto;
+  border: 1px solid #ddd; /* Border styling */
+  padding: 20px; /* Adjust the padding as needed */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional box shadow */
+}
+
   
 
   
