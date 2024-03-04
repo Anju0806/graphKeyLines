@@ -1,48 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graph Visualization with D3.js and Neo4j</title>
 
- <!DOCTYPE html>
- <html lang="en">
- <head>
-     <meta charset="UTF-8">
-     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>graphKeyLines</title>
- 
-     <!-- Include D3.js library -->
-     <script src="https://d3js.org/d3.v5.min.js"></script>
- 
-     <!-- Include NeoVis.js library (assuming this is your Neo4j visualization library) -->
-     <script src="https://cdn.neo4jlabs.com/neovis.js"></script>
- 
-     <!-- Link to your custom JavaScript file -->
-     <script src="/js/script.js"></script>
- 
-     <!-- Link to your custom CSS file -->
-     <link rel="stylesheet" href="/css/style.css">
- </head>
- <body>
-     <!-- Your HTML content here -->
- 
-     <div id="visualization-container">
+    <!-- Include D3.js library -->
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+
+    <!-- Include NeoVis.js library (assuming this is your Neo4j visualization library) -->
+    <script src="https://cdn.neo4jlabs.com/neovis.js"></script>
+
+    <!-- Link to your custom JavaScript file -->
+    <script src="/js/script"></script>
+
+    <!-- Link to your custom CSS file -->
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <!-- Your HTML content here -->
+
+    <div id="visualization-container">
         <!-- This is where D3.js or NeoVis.js will render the visualization -->
+        <h1>Graph Visualization with D3.js and Neo4j</h1>
+
 
         <ul>
             <% neo4jData.forEach(item => { %>
-                <li class="list-item">
-                    
-                    <%= item.node1.name %> 
-                     <%= item.relationship %> 
-                     <%= item.node2.name %> 
-                     
-                    <!--  <br> <br> <br>
-                    <strong>Start Node:</strong> <%= item.node1.name %> <br>
-                    <strong>Relationship Type:</strong> <%= item.relationship %> <br>
-                    <strong>End Node:</strong> <%= item.node2.name %> <br> -->
-                </li>
+            <li class="list-item">
+                <%= item.node1.name %> <%= item.relationship %> <%= item.node2.name %>
+            </li>
             <% }); %>
         </ul>
+        
+        <svg id="chart"></svg>
     </div>
- 
- </body>
- </html>
- 
+
+    <!-- Provide a noscript message for users without JavaScript -->
+    <noscript>
+        <p>This page requires JavaScript for optimal functionality. Please enable it in your browser settings.</p>
+    </noscript>
+
+    <script id="neo4jDataScript" data-neo4jdata="<%= JSON.stringify(neo4jData) %>"></script>
+</body>
+
+</html>
